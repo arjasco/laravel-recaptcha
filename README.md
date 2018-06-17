@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/arjasco/laravel-recaptcha.svg?branch=master)](https://travis-ci.org/arjasco/laravel-recaptcha)
 
-This package allows you to easily add reCAPTCHA to your laravel projects.
+This package allows you to easily add reCAPTCHA to your Laravel projects.
 
 ## Installation
 
@@ -26,10 +26,10 @@ Publish the configuration file to your project.
 Add your site key and secret to `recaptcha.php`.
 
 ```php
-return [
-    'sitekey' => env('RECAPTCHA_SITEKEY'),
-    'secret' => env('RECAPTCHA_SECRET')
-],
+ return [
+     'sitekey' => env('RECAPTCHA_SITEKEY'),
+     'secret' => env('RECAPTCHA_SECRET')
+ ]
 ```
 
 ## Usage
@@ -81,7 +81,7 @@ This will return the readable errors has set out on the reCAPTCHA documentation.
 
 You may want to simply check for the existence of the `recaptcha` session key to present a more generic error to the user. 
 
-Use the helper function `recaptcha()`  to embed the HTML within your form.
+Use the helper function `recaptcha()` to embed the HTML within your form.
 
 ```html
 <form action="/contact" method="POST">
@@ -102,4 +102,4 @@ You may also pass a load of options to the function to further customise the emb
 </form>
 ```
 
-See [here](https://developers.google.com/recaptcha/docs/display) for a table of more options, omit the `data-` part of each options when using in the options array.
+See [here](https://developers.google.com/recaptcha/docs/display) for a table of more options. Omit the `data-` part of each options when using in the options array.
