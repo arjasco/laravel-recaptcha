@@ -59,7 +59,11 @@ If you want to automatically inject the script into your HTML head tag, simply a
 Route::get('/contact', 'ContactController@index')->middleware('recaptcha');
 ```
 
-Next apply the same middleware to the POST route of your form, this will verify the reCAPTCHA response when the form is submitted.
+### Verification
+
+You have two options to verify the response. 
+
+Firstly you can use the same middleware on the POST route of your form, this will verify the reCAPTCHA response when the form is submitted.
 
 ```php
 Route::post('/contact', 'ContactController@send')->middleware('recaptcha');
@@ -80,6 +84,38 @@ You might do:
 This will return the readable errors has set out on the reCAPTCHA documentation.
 
 You may want to simply check for the existence of the `recaptcha` session key to present a more generic error to the user. 
+
+Secondly you can use the validator to verify the response.
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class ContactController extends Controller
+{
+    public function send(Request $request)
+    {
+        $this->validate($request, [
+            'g-recaptcha-response' => 'recaptcha'
+        ]);
+    }
+}
+```
+
+This will return the same error messages, however it will be under the `recaptcha` key.
+
+For example:
+
+```php
+$errors->first('recaptcha', '<span>:message</span>');
+```
+
+This would show the first error returned by the validator.
+
+### Form embed
 
 Use the helper function `recaptcha()` to embed the HTML within your form.
 
