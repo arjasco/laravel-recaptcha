@@ -2,11 +2,12 @@
 
 namespace Arjasco\LaravelRecaptcha;
 
+use Arjasco\LaravelRecaptcha\RecaptchaValidator;
 use Illuminate\Support\ServiceProvider;
 use GuzzleHttp\Client;
 
 class RecaptchaServiceProvider extends ServiceProvider
-{    
+{
     /**
      * Boot the application services.
      *
@@ -22,21 +23,9 @@ class RecaptchaServiceProvider extends ServiceProvider
             require $helpers;
         }
 
-        $this->app['validator']->extendImplicit('recaptcha', function ($attribute, $value, $parameters, $validator) {
-            $recaptcha = $this->app['recaptcha'];
-
-            $response = $recaptcha->verify($value);
-
-            if (! $response['success']) {
-                $errors = $recaptcha->mapErrorsToMessages($response['error-codes']);
-
-                foreach ($errors as $error) {
-                    $validator->errors()->add('recaptcha', $error);
-                }
-            }
-
-            return $response['success'];
-        });
+        $this->app['validator']->extendImplicit(
+            'recaptcha', RecaptchaValidator::class.'@validate'
+        );
     }
 
     /**
@@ -48,7 +37,7 @@ class RecaptchaServiceProvider extends ServiceProvider
     {
         $this->app->singleton('recaptcha', function () {
             return new Recaptcha(
-                new Client, 
+                new Client,
                 $this->app['config']['recaptcha'] ?? []
             );
         });

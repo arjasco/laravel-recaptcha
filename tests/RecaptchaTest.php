@@ -64,19 +64,4 @@ class RecpatchaTest extends TestCase
 
         $this->assertSame(['success' => true], $response);
     }
-
-    public function testThatWeCanGetMessageRepresentationsOfErrors()
-    {
-        $recaptcha = new Recaptcha(m::mock(Client::class));
-
-        $result = $recaptcha->mapErrorsToMessages([
-            'missing-input-secret', 
-            'invalid-input-secret'
-        ]);
-
-        $this->assertSame([
-            'The secret parameter is missing.',
-            'The secret parameter is invalid or malformed.'
-        ], $result);
-    }
 }

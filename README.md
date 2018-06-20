@@ -34,87 +34,6 @@ Add your site key and secret to `recaptcha.php`.
 
 ## Usage
 
-You can use the single provided middleware to automatically inject the reCAPTCHA script and do the verification check. 
-
-Register the middleware in your `Kernel.php` file.
-```php
-<?php
-
- /**
-  * The application's route middleware.
-  *
-  * These middleware may be assigned to groups or used individually.
-  *
-  * @var array
-  */
- protected $routeMiddleware = [
-     ...
-     'recaptcha' => \Arjasco\LaravelRecaptcha\RecaptchaMiddleware::class,
- ];
-```
-
-If you want to automatically inject the script into your HTML head tag, simply add the middleware to any GET route, this is optional and you might wish to include the script yourself.
-
-```php
-Route::get('/contact', 'ContactController@index')->middleware('recaptcha');
-```
-
-### Verification
-
-You have two options to verify the response. 
-
-Firstly you can use the same middleware on the POST route of your form, this will verify the reCAPTCHA response when the form is submitted.
-
-```php
-Route::post('/contact', 'ContactController@send')->middleware('recaptcha');
-```
-
-On a failed response it will send a redirect back to the previous page with an array of any errors. This accessible via the `recaptcha` session key.  
-
-You might do:
-```html
-@if(session->has('recaptcha'))
-<ul>
-    @foreach(session()->get('recaptcha') as $error)
-        <li>{{ $error }}</li>
-    @endforeach
-</ul>
-@endif
-```
-This will return the readable errors has set out on the reCAPTCHA documentation.
-
-You may want to simply check for the existence of the `recaptcha` session key to present a more generic error to the user. 
-
-Secondly you can use the validator to verify the response.
-
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-class ContactController extends Controller
-{
-    public function send(Request $request)
-    {
-        $this->validate($request, [
-            'g-recaptcha-response' => 'recaptcha'
-        ]);
-    }
-}
-```
-
-This will return the same error messages, however it will be under the `recaptcha` key.
-
-For example:
-
-```php
-$errors->first('recaptcha', '<span>:message</span>');
-```
-
-This would show the first error returned by the validator.
-
 ### Form embed
 
 Use the helper function `recaptcha()` to embed the HTML within your form.
@@ -139,3 +58,61 @@ You may also pass a load of options to the function to further customise the emb
 ```
 
 See [here](https://developers.google.com/recaptcha/docs/display) for a table of more options. Omit the `data-` part of each options when using in the options array.
+
+### Verification
+
+Add the `recaptcha` rule to your validator on the request you wish to verify.
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class ContactController extends Controller
+{
+    public function send(Request $request)
+    {
+        $this->validate($request, [
+            'g-recaptcha-response' => 'recaptcha'
+        ]);
+    }
+}
+```
+
+### Errors
+
+Any errors from the verification will be added to the `recaptcha` key. For example if you wanted to get just the first error you might do something like the following:
+
+```php
+<div class="form__errors>
+    {!! $errors->first('recaptcha', '<span>:message</span>'); !!}
+</div>
+```
+
+### Automatic script injection
+
+If you want to automatically inject the script into your HTML head tag, simply add the middleware to any GET route, this is optional and you might wish to include the script yourself.
+
+Register the middleware in your `Kernel.php` file.
+```php
+<?php
+
+ /**
+  * The application's route middleware.
+  *
+  * These middleware may be assigned to groups or used individually.
+  *
+  * @var array
+  */
+ protected $routeMiddleware = [
+     ...
+     'recaptcha' => \Arjasco\LaravelRecaptcha\RecaptchaMiddleware::class,
+ ];
+```
+
+Use the middleware on your GET route.
+```php
+Route::get('/contact', 'ContactController@index')->middleware('recaptcha');
+```
