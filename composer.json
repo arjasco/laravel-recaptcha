@@ -1,6 +1,6 @@
 {
     "name": "arjasco/laravel-recaptcha",
-    "description": "Easily add reCAPTCHA to your lLaravel projects",
+    "description": "Easily add reCAPTCHA to your Laravel projects",
     "type": "library",
     "license": "MIT",
     "authors": [
