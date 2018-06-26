@@ -48,12 +48,23 @@ Use the helper function `recaptcha()` to embed the HTML within your form.
 </form>
 ```
 
+Alternatively, if you are using Blade, you can use the `@recaptcha` directive
+
+```html
+<form action="/contact" method="POST">
+    ...
+    @recaptcha
+</form>
+```
+
 You may also pass a load of options to the function to further customise the embed.
 
 ```html
 <form action="/contact" method="POST">
     ...
     {!! recaptcha(['theme' => 'dark', 'size' => 'compact']) !!}
+    <!-- Or using the blade directive.. -->
+    @recaptcha(['theme' => 'dark', 'size' => 'compact'])
 </form>
 ```
 

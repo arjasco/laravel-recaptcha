@@ -4,6 +4,7 @@ namespace Arjasco\LaravelRecaptcha;
 
 use Arjasco\LaravelRecaptcha\RecaptchaValidator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 use GuzzleHttp\Client;
 
 class RecaptchaServiceProvider extends ServiceProvider
@@ -26,6 +27,10 @@ class RecaptchaServiceProvider extends ServiceProvider
         $this->app['validator']->extendImplicit(
             'recaptcha', RecaptchaValidator::class.'@validate'
         );
+
+        Blade::directive('recaptcha', function ($options) {
+            return "<?php echo recaptcha($options); ?>";
+        });
     }
 
     /**
