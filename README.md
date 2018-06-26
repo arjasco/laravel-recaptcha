@@ -97,8 +97,8 @@ class ContactController extends Controller
 Any errors from the verification will be added to the `recaptcha` key. For example if you wanted to get just the first error you might do something like the following:
 
 ```php
-<div class="form__errors>
-    {!! $errors->first('recaptcha', '<span>:message</span>'); !!}
+<div class="form__errors">
+    {!! $errors->first('recaptcha', '<span>:message</span>') !!}
 </div>
 ```
 
