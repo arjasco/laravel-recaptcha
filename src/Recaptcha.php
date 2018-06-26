@@ -30,6 +30,7 @@ class Recaptcha
     /**
      * Create a new reCAPTCHA instance.
      *
+     * @param \GuzzleHttp\Client $httpClient
      * @param array $options
      */
     public function __construct(Client $httpClient, $options = [])

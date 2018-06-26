@@ -7,14 +7,14 @@ class RecaptchaValidator
     /**
      * Recaptcha instance.
      *
-     * @var \Arjasco\LaravelRecaptcha\Recaptcha
+     * @var Recaptcha
      */
     protected $recaptcha;
 
     /**
      * Create a new Recaptcha validator instance.
      *
-     * @param Recpatcha $recaptcha
+     * @param Recaptcha $recaptcha
      */
     public function __construct(Recaptcha $recaptcha)
     {
